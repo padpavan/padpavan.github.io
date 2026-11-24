@@ -17,11 +17,14 @@
 :root {
   --bg:#000000; --text:#f2f2f2; --bold:#ffffff; --muted:#a1a1a1;
   --rule:#262626; --chrome:#1c1c1c; --cursor:#4d4d4d; --sel:#414141;
+  /* Copper is reserved for the circuit: the trace, vias and pad. Nothing else uses it. */
+  --cu:#c47f45; --cu-trace:#6e4526; --silk:#1d1d1d;
   --sans:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter","Segoe UI",Roboto,system-ui,sans-serif;
   --mono:"SF Mono",ui-monospace,Menlo,Monaco,"Cascadia Mono",Consolas,monospace;
 }
 *,*::before,*::after { box-sizing:border-box }
-html { background:var(--bg); -webkit-text-size-adjust:100%; scroll-padding-top:72px }
+html { background:var(--bg); -webkit-text-size-adjust:100%; scroll-padding-top:72px; overflow-x:clip }
+body { overflow-x:clip }
 @media (prefers-reduced-motion:no-preference) { html { scroll-behavior:smooth } }
 body { margin:0; color:var(--text); font:400 1.0625rem/1.65 var(--sans); -webkit-font-smoothing:antialiased }
 ::selection { background:var(--sel); color:var(--bold) }
@@ -42,25 +45,50 @@ header nav { display:flex; gap:20px; margin-left:auto; overflow-x:auto; scrollba
 header nav a { font-size:.9375rem; color:var(--muted); text-decoration:none; white-space:nowrap }
 header nav a:hover { color:var(--text) }
 
-/* intro: the one Terminal window */
-.intro { padding:72px 0 24px }
+/* intro: the one Terminal window, sitting on a board */
+.intro { position:relative; isolation:isolate; padding:72px 0 24px }
+.pcb { position:absolute; z-index:-1; top:0; left:50%; width:100vw; height:100%; transform:translateX(-50%); color:var(--silk); pointer-events:none;
+  -webkit-mask-image:linear-gradient(#000 40%, transparent 78%); mask-image:linear-gradient(#000 40%, transparent 78%) }
 .window { border:1px solid #333; border-radius:10px; overflow:hidden; background:var(--bg) }
 .titlebar { position:relative; display:flex; align-items:center; height:30px; padding:0 12px; background:var(--chrome); border-bottom:1px solid #000 }
 .lights { display:flex; gap:8px }
 .lights i { width:12px; height:12px; border-radius:50% }
 .lights i:nth-child(1) { background:#ff5f57 } .lights i:nth-child(2) { background:#febc2e } .lights i:nth-child(3) { background:#28c840 }
 .titlebar span { position:absolute; inset:0; display:grid; place-items:center; font:500 .8125rem var(--sans); color:var(--muted); pointer-events:none }
-.screen { min-height:14.5rem; padding:14px 16px 18px; font:.875rem/1.6 var(--mono); white-space:pre-wrap; overflow-wrap:anywhere }
+.screen { padding:14px 16px 18px; font:.875rem/1.6 var(--mono); font-variant-numeric:tabular-nums }
+.ln { white-space:pre-wrap; overflow-wrap:anywhere }
+.hop { display:grid; grid-template-columns:3ch 17ch 9ch minmax(0,1fr); gap:0 1ch; text-decoration:none; white-space:nowrap }
+.hop .n { text-align:right; color:var(--muted) } .hop .w, .hop .d { color:var(--muted) }
+.hop .h { color:var(--text) } .hop .d { overflow:hidden; text-overflow:ellipsis }
+.hop:hover .h, .hop:focus-visible .h { text-decoration:underline; text-underline-offset:3px }
+.hop.lost .h { color:var(--muted) } .hop.dest .h { color:var(--bold); font-weight:600 }
 .screen .p { color:var(--muted) }
 .screen b { font-weight:600; color:var(--bold) }
 .screen a { text-decoration-color:#4d4d4d }
 .cursor { display:inline-block; width:.62em; height:1.15em; vertical-align:text-bottom; background:var(--cursor) }
-.js .screen .out { display:none } .js .screen .out.on { display:block }
+.js .screen .out { visibility:hidden } .js .screen .out.on { visibility:visible }
 
 .lede { margin-top:36px; max-width:60ch }
 .lede h1 { font:600 2.25rem/1.15 var(--sans); letter-spacing:-.02em; color:var(--bold) }
 .lede p { margin-top:14px; color:var(--muted); font-size:1.125rem }
 .links { display:flex; flex-wrap:wrap; gap:8px 22px; margin-top:20px; font-size:.9375rem }
+
+/* the board: one copper trace from Experience down to Contact */
+.board { --pad:44px; --tx:12px; position:relative; padding-left:var(--pad) }
+.board::before { content:""; position:absolute; left:calc(var(--tx) - 1px); top:96px; bottom:6px; width:2px; background:var(--cu-trace) }
+.board::after { content:""; position:absolute; left:calc(var(--tx) - 8px); bottom:-10px; width:16px; height:16px; border-radius:2px; background:var(--cu) }
+.via { --d:18px; position:absolute; left:calc(var(--tx) - var(--d) / 2 - var(--pad)); width:var(--d); height:var(--d); border-radius:50%;
+  background:radial-gradient(circle, var(--bg) 0 32%, var(--cu) 36%) }
+h2 { position:relative } h2::before { content:""; position:absolute; top:5px; --d:18px; left:calc(var(--tx) - 9px - var(--pad)); width:18px; height:18px; border-radius:50%;
+  background:radial-gradient(circle, var(--bg) 0 32%, var(--cu) 36%) }
+.entry, .note { position:relative }
+.entry::before, .note::before { content:""; position:absolute; top:28px; left:calc(var(--tx) - 6px - var(--pad)); width:12px; height:12px; border-radius:50%;
+  background:radial-gradient(circle, var(--bg) 0 30%, var(--cu) 36%); transition:background .2s }
+.entry:hover::before, .note:hover::before, .entry:target::before {
+  background:radial-gradient(circle, var(--text) 0 30%, var(--cu) 36%) }
+.entry:target { background:linear-gradient(90deg, rgb(196 127 69 / .08), transparent 70%) }
+.pkt { position:absolute; z-index:2; top:0; left:calc(var(--tx) - 5px); width:10px; height:10px; border-radius:50%; background:var(--text);
+  box-shadow:0 0 0 3px rgb(196 127 69 / .35); pointer-events:none; will-change:transform }
 
 /* sections */
 section { padding-top:88px }
@@ -102,15 +130,20 @@ footer { margin-top:96px; padding:28px 0 40px; border-top:1px solid var(--rule);
 @media (max-width:640px) {
   .wrap { padding:0 18px }
   .intro { padding-top:40px }
-  .screen { min-height:14rem; font-size:.75rem; padding:12px }
+  .screen { font-size:.6875rem; padding:12px }
   .lede h1 { font-size:1.875rem }
   .entry, .skills { grid-template-columns:minmax(0,1fr) }
   .skills dd { margin-bottom:8px }
   header nav { gap:16px }
   .home { display:none } header nav { margin-left:0 }
+  .board { --pad:26px; --tx:6px }
+  .entry::before, .note::before { width:10px; height:10px; left:calc(var(--tx) - 5px - var(--pad)) }
+  h2::before { width:14px; height:14px; left:calc(var(--tx) - 7px - var(--pad)); top:7px }
+  .board::after { width:12px; height:12px; left:calc(var(--tx) - 6px) }
+  .hop { grid-template-columns:2.5ch 16ch 8ch; } .hop .d { display:none }
   section { padding-top:64px }
 }
-@media (prefers-reduced-motion:reduce) { * { transition:none !important } }
+@media (prefers-reduced-motion:reduce) { * { transition:none !important } .pkt { display:none } }
 </style>
 <script>document.documentElement.classList.add('js')</script>
 </head>
@@ -133,14 +166,48 @@ footer { margin-top:96px; padding:28px 0 40px; border-top:1px solid var(--rule);
 <main id="main" class="wrap">
 
 <div class="intro" id="top">
+  <svg class="pcb" aria-hidden="true" focusable="false">
+    <defs>
+      <pattern id="pcbp" width="420" height="420" patternUnits="userSpaceOnUse">
+        <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M0 24h180l14 14h60l14-14h152"/><path d="M0 60h90l30 30h120l30-30h150"/>
+          <path d="M60 110v40l30 30v90l-30 30v70"/><path d="M170 120v50l40 40h80"/>
+          <path d="M250 400v-70l40-40h60l30-30V130"/><path d="M400 330h-40l-30 30h-40"/>
+          <rect x="120" y="240" width="70" height="50" rx="3"/>
+          <path d="M130 240v-8M145 240v-8M160 240v-8M175 240v-8M130 290v8M145 290v8M160 290v8M175 290v8"/>
+        </g>
+        <g fill="none" stroke="currentColor" stroke-width="3.5">
+          <circle cx="60" cy="110" r="4"/><circle cx="60" cy="370" r="4"/><circle cx="170" cy="120" r="4"/><circle cx="290" cy="210" r="4"/>
+          <circle cx="250" cy="400" r="4"/><circle cx="380" cy="130" r="4"/><circle cx="400" cy="330" r="4"/>
+        </g>
+        <g fill="currentColor" font-family="ui-monospace, monospace" font-size="9">
+          <text x="313" y="144">R12</text><text x="148" y="269">U3</text><text x="12" y="188">J1</text><text x="327" y="390">C7</text>
+        </g>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#pcbp)"/>
+  </svg>
   <div class="window">
-    <div class="titlebar"><div class="lights" aria-hidden="true"><i></i><i></i><i></i></div><span aria-hidden="true">pavan — -zsh — 80×24</span></div>
-    <div class="screen" id="screen" aria-label="Terminal showing whoami and a list of projects. The same information is on the rest of this page."><div class="out on p" id="login">Last login on ttys000</div><div class="out on"><span class="p">pavan@nus ~ %</span> <span id="c1">whoami</span></div><div class="out"><b>Pavan</b> (Baranikumar Saritha Padmanaban)
-Electrical Engineering + Information Security, NUS
-LTA–SGRail Scholar
-</div><div class="out"><span class="p">pavan@nus ~ %</span> <span id="c2">ls projects/</span></div><div class="out"><a href="#p-opensession">opensession</a>   <a href="#p-kneesound">kneesound</a>   <a href="#p-fpga">fpga-arena</a>   <a href="#p-compliance">compliance-dashboard</a>
-<a href="#p-stm32">stm32-console</a>   <a href="#p-iot">iot-hub</a>   <a href="#e-utr">utr-kitchen</a>   <a href="#p-homelab">homelab</a>
-</div><div class="out"><span class="p">pavan@nus ~ %</span> <span class="cursor"></span></div></div>
+    <div class="titlebar"><div class="lights" aria-hidden="true"><i></i><i></i><i></i></div><span aria-hidden="true">pavan — traceroute — 80×24</span></div>
+    <nav class="screen" id="screen" aria-label="Traceroute: each hop is a step in my path, oldest first. Each links to its entry below.">
+      <div class="ln p" id="login">Last login on ttys000</div>
+      <div class="ln"><span class="p">pavan@nus ~ %</span> <span id="c1">traceroute pavan</span></div>
+      <div class="ln out p">traceroute to pavan (nus.edu.sg), 30 hops max</div>
+      <a class="hop out" href="#e-globotix"><span class="n">1</span><span class="h">globotix.robots</span><span class="w">Mar 2024</span><span class="d">remote support, 13 robots</span></a>
+      <a class="hop out" href="#p-ctf"><span class="n">2</span><span class="h">ctf.flags</span><span class="w">2024</span><span class="d">top 25 of 100, STACK the Flags</span></a>
+      <a class="hop out" href="#p-homelab"><span class="n">3</span><span class="h">homelab.local</span><span class="w">2025</span><span class="d">six self-hosted services</span></a>
+      <a class="hop out" href="#p-stm32"><span class="n">4</span><span class="h">stm32.console</span><span class="w">Aug 2025</span><span class="d">EE2028, grade A</span></a>
+      <a class="hop out" href="#p-iot"><span class="n">5</span><span class="h">hacknroll.iot</span><span class="w">Jan 2026</span><span class="d">assisted living IoT hub</span></a>
+      <a class="hop out" href="#p-kneesound"><span class="n">6</span><span class="h">kneesound.med</span><span class="w">Jan 2026</span><span class="d">hardware lead, top 5</span></a>
+      <a class="hop out" href="#e-thrive"><span class="n">7</span><span class="h">thrive.consult</span><span class="w">Apr 2026</span><span class="d">associate consultant</span></a>
+      <a class="hop out" href="#e-sbs"><span class="n">8</span><span class="h">sbstransit.nel</span><span class="w">May 2026</span><span class="d">systems intern, CISO-approved dashboard</span></a>
+      <a class="hop out" href="#e-utr"><span class="n">9</span><span class="h">utown.kitchen</span><span class="w">Jul 2026</span><span class="d">booking app and Azure move</span></a>
+      <a class="hop out" href="#p-fpga"><span class="n">10</span><span class="h">fpga.arena</span><span class="w">Aug 2026</span><span class="d">Dijkstra and BFS on a Basys 3</span></a>
+      <a class="hop out" href="#p-opensession"><span class="n">11</span><span class="h">opensession.daw</span><span class="w">Nov 2026</span><span class="d">hackathon champion</span></a>
+      <a class="hop out lost" href="#now"><span class="n">12</span><span class="h">* * *</span><span class="w">Jan 2027</span><span class="d">sfu.ca, exchange, not reached yet</span></a>
+      <a class="hop out dest" href="#contact"><span class="n">13</span><span class="h">you</span><span class="w">now</span><span class="d">destination reached</span></a>
+      <div class="ln out"><span class="p">pavan@nus ~ %</span> <span class="cursor"></span></div>
+    </nav>
   </div>
 
   <div class="lede">
@@ -153,6 +220,9 @@ LTA–SGRail Scholar
     </div>
   </div>
 </div>
+
+<div class="board" id="board">
+<span class="pkt" id="pkt" aria-hidden="true"></span>
 
 <section id="experience" aria-labelledby="experience-h">
   <h2 id="experience-h">Experience</h2>
@@ -386,6 +456,7 @@ LTA–SGRail Scholar
     <a href="https://github.com/padpavan" rel="noopener">GitHub</a>
   </div>
 </section>
+</div>
 
 </main>
 
@@ -395,21 +466,31 @@ LTA–SGRail Scholar
 
 <script>
 (() => {
-  // One orchestrated moment: type the two commands, print their output. Skipped for reduced motion.
-  const out = [...document.querySelectorAll('#screen .out')];
   const login = document.getElementById('login');
-  const d = new Date();
-  login.textContent = 'Last login: ' + d.toLocaleString('en-US', { weekday:'short', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false }).replace(/,/g, '') + ' on ttys000';
-  const show = () => out.forEach(o => o.classList.add('on'));
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return show();
+  login.textContent = 'Last login: ' + new Date().toLocaleString('en-US', { weekday:'short', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false }).replace(/,/g, '') + ' on ttys000';
+  const out = [...document.querySelectorAll('#screen .out')];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Packet: rides the copper trace with scroll position.
+  const board = document.getElementById('board'), pkt = document.getElementById('pkt');
+  let ticking = false;
+  const place = () => {
+    ticking = false;
+    const r = board.getBoundingClientRect(), top = 96, len = r.height - top - 12;
+    const p = Math.min(1, Math.max(0, (innerHeight * 0.45 - r.top - top) / len));
+    pkt.style.transform = `translateY(${top + p * len - 5}px)`;
+  };
+  addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(place); } }, { passive:true });
+  addEventListener('resize', place); place();
+
+  if (reduce) { out.forEach(o => o.classList.add('on')); return; }
   const sleep = ms => new Promise(r => setTimeout(r, ms));
-  const cmds = ['c1', 'c2'].map(id => { const el = document.getElementById(id), t = el.textContent; el.textContent = ''; return [el, t]; });
-  const type = async ([el, t]) => { for (const ch of t) { el.textContent += ch; await sleep(55 + Math.random() * 45); } };
+  const c1 = document.getElementById('c1'), cmd = c1.textContent; c1.textContent = '';
   (async () => {
-    await sleep(500); await type(cmds[0]); await sleep(250);
-    out[2].classList.add('on'); out[3].classList.add('on'); await sleep(600);
-    await type(cmds[1]); await sleep(250);
-    out[4].classList.add('on'); out[5].classList.add('on');
+    await sleep(450);
+    for (const ch of cmd) { c1.textContent += ch; await sleep(50 + Math.random() * 45); }
+    await sleep(300);
+    for (const o of out) { o.classList.add('on'); await sleep(o.classList.contains('lost') ? 700 : 90 + Math.random() * 90); }
   })();
 })();
 </script>
