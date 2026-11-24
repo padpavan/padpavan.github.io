@@ -367,7 +367,7 @@ footer { border-top:1px solid var(--line); background:var(--panel) }
 
     <!-- ============ HERO ============ -->
     <div class="hero" id="top">
-      <div class="term" id="term" role="img" aria-label="Analyser screen: a sampled analog signal becomes packets, then traceroute pavan lists ten hops. The same hops are described in the Trace section below.">
+      <div class="term" id="term" role="img" aria-label="Analyser screen: a sampled analog signal becomes packets, then traceroute pavan lists each hop. The same hops are described in the Trace section below.">
         <div class="term-bar">
           <span class="term-title">pavan@nus: traceroute</span>
           <button class="skipbtn" id="skip" type="button">Skip trace</button>
@@ -383,11 +383,9 @@ footer { border-top:1px solid var(--line); background:var(--panel) }
         <h1>Pavan <span class="full">(Baranikumar Saritha Padmanaban)</span></h1>
         <p>Electrical Engineering with a second major in Information Security @ NUS. <span>Building systems that are reliable and secure, from circuits to cloud.</span></p>
         <div class="btns">
-          <a class="btn pri" href="https://github.com/ZanderKing" rel="noopener">GitHub</a>
+          <a class="btn pri" href="https://github.com/padpavan" rel="noopener">GitHub</a>
           <a class="btn" href="https://linkedin.com/in/bspadmanaban" rel="noopener">LinkedIn</a>
           <a class="btn" href="mailto:padmanabanpavan@gmail.com">Email</a>
-          <!-- PLACEHOLDER: add resume.pdf next to index.html, or change this href -->
-          <a class="btn" href="resume.pdf">Resume</a>
         </div>
       </div>
     </div>
@@ -416,7 +414,7 @@ footer { border-top:1px solid var(--line); background:var(--panel) }
         </div>
         <noscript>
           <p>This page builds its project list with JavaScript. Without it, find me at
-          <a href="https://github.com/ZanderKing">github.com/ZanderKing</a>,
+          <a href="https://github.com/padpavan">github.com/padpavan</a>,
           <a href="https://linkedin.com/in/bspadmanaban">linkedin.com/in/bspadmanaban</a> or
           <a href="mailto:padmanabanpavan@gmail.com">padmanabanpavan@gmail.com</a>.</p>
         </noscript>
@@ -438,10 +436,6 @@ footer { border-top:1px solid var(--line); background:var(--panel) }
           </div>
           <p class="fig">Pin configuration, top view</p>
           <div class="readout" id="readout" aria-live="polite">Select a pin to trace it to its hops.</div>
-          <div class="sheet-foot">
-            <!-- PLACEHOLDER: same resume link as the hero -->
-            <a class="btn pri" href="resume.pdf">Download datasheet (PDF)</a>
-          </div>
         </div>
       </section>
 
@@ -505,7 +499,7 @@ const cl = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 /* =====================================================================
    CONTENT — edit hops and skills here.
    ===================================================================== */
-const GH = 'https://github.com/ZanderKing';
+const GH = 'https://github.com/padpavan';
 const HOPS = [
   { id:'globotix', host:'globotix.robots', tags:['HW','NET'], when:'2024–2025',
     line:'Remote support for 13 autonomous robots',
@@ -519,9 +513,16 @@ const HOPS = [
     summary:'A motion-controlled game console on an STM32L4S5, with a live web dashboard served from the MCU.',
     stack:['STM32L4S5','9-axis IMU','I2C','OLED','ESP8266'],
     details:['9-axis IMU read over I2C','100 Hz timer loop','Complementary filter with hard/soft-iron magnetometer calibration','OLED graphics','Live web dashboard served from the MCU via an ESP8266'],
-    links:[{ t:'github.com/ZanderKing/stm32-game-console', href:GH+'/stm32-game-console' }],
+    links:[{ t:'github.com/padpavan/stm32-game-console', href:GH+'/stm32-game-console' }],
     viz:'i2c', vizCap:'Logic analyser: I2C read from the IMU', vizLabel:'Logic analyser view of SCL and SDA with decoded I2C reads from the IMU',
     lat:[2.871,3.012,2.904] },
+  { id:'iothub', host:'hacknroll.iot', tags:['HW','NET'], when:'Jan 2026',
+    line:'Assisted Living IoT Hub, NUS Hack&Roll 2026',
+    summary:'A one-button ordering device for accessibility, built at NUS Hack&Roll 2026.',
+    stack:['Arduino Nano','ESP8266','Node.js','Express','Socket.IO'],
+    details:['Keypad and LCD on an Arduino Nano','ESP8266 sends each order as HTTP JSON','Node.js backend pushes orders to a live web dashboard over Socket.IO'],
+    links:[{ t:'github.com/padpavan/hacknroll2026', href:GH+'/hacknroll2026' }],
+    lat:[3.466,3.521,3.490] },
   { id:'homelab', host:'homelab.local', tags:['NET','CLOUD'],
     line:'Self-hosted services, private networking and DNS',
     summary:'A home lab running 6 Docker services, with a NAS, Tailscale and Pi-hole DNS.',
@@ -530,18 +531,18 @@ const HOPS = [
     links:[{ t:'Write-up: the DNS fix', href:'#post-dns', ph:true }],
     lat:[4.118,4.377,4.096] },
   { id:'rail', host:'rail.ops', tags:['NET','SEC'], when:'May–Aug 2026',
-    line:'Internship at a rail operator',
-    summary:'Internship at a rail operator: fault diagnostics, connectivity checks and security compliance documentation.',
-    stack:['Fault diagnostics','Connectivity checks','Compliance documentation'],
-    details:['Fault diagnostics on 50 endpoints and 4 servers','Connectivity checks across 17 MRT stations','Security compliance documentation'],
+    line:'System Engineering Intern, SBS Transit (North East Line)',
+    summary:'System Engineering internship at SBS Transit on the North East Line: fault diagnostics, station connectivity checks, CSA CCoP 2.0 compliance and compliance automation.',
+    stack:['Python','Windows/Linux','Connectivity checks','CSA CCoP 2.0'],
+    details:['Antivirus updates and fault checks on 50 endpoints and 4 servers','Connectivity checks and Ethernet port blockers across 17 MRT stations','Python script that cut a recurring compliance task from two weeks to ten minutes','CCoP 2.0 policies and technical work instructions','Procurement documents for a vendor contract of about SGD 100K'],
     links:[], lat:[7.642,7.580,7.911] },
   { id:'seccenter', host:'security-center.dash', tags:['SEC','CLOUD','NET'], key:true, when:'Built during the internship',
     line:'Antivirus evidence and compliance dashboard',
-    summary:'An antivirus evidence and compliance dashboard built during the internship. Presented to the CISO.',
+    summary:'An antivirus evidence and compliance dashboard built during the internship. Approved by the CISO.',
     quote:'Unknown never means clean.',
     stack:['FastAPI','Next.js','OCR','SHA-256','Local vision-LLM (optional)'],
     details:['Parsers for five AV vendors','OCR with confidence gates','SHA-256 content-addressed cache','Atomic writes','Append-only audit trail','Optional local vision-LLM fallback'],
-    links:[{ t:'github.com/ZanderKing/log-dashboard', href:GH+'/log-dashboard' }],
+    links:[{ t:'github.com/padpavan/log-dashboard', href:GH+'/log-dashboard' }],
     lat:[9.305,9.127,9.488] },
   { id:'ctf', host:'ctf.flags', tags:['SEC'],
     line:'Capture-the-flag competitions',
@@ -552,26 +553,39 @@ const HOPS = [
     lat:[12.730,13.004,12.615] },
   { id:'kneesound', host:'kneesound.med', tags:['HW','CLOUD'], status:'in development',
     line:'Knee acoustic sensing, as Hardware Lead',
-    summary:'Hardware Lead on a knee acoustic sensing project. NUS MedTech Sprintathon Top 5.',
+    summary:'Hardware Lead in a team of four on a knee acoustic sensing project. NUS MedTech Sprintathon 2026, Top 5.',
     note:'Status: in development, pilot planned. Not yet clinically validated.',
     stack:['PVDF film','Piezo sensors','OPA2320','ADS131M04','SPI','ESP32-S3','KiCad'],
-    details:['PVDF film and piezo sensors','OPA2320 charge amplifiers','ADS131M04 24-bit ADC over SPI','ESP32-S3','Board design in KiCad'],
-    links:[], viz:'spi', vizCap:'Sensor signal and SPI frames to the 24-bit ADC', vizLabel:'Analog sensor waveform above SPI frames to the 24-bit ADC, with CS, SCLK, MOSI and MISO lanes',
+    details:['First analog front end (~100 Hz–12 kHz, ~20 dB gain) characterised on an oscilloscope','Compared MEMS, PVDF film and piezo sensors across body placements','V2 schematic in KiCad: OPA2320 charge amplifiers into an ADS131M04 24-bit ADC over SPI','ESP32 acquisition at 5 kHz with wireless logging'],
+    links:[{ t:'github.com/padpavan/sprintathon2026', href:GH+'/sprintathon2026' }], viz:'spi', vizCap:'Sensor signal and SPI frames to the 24-bit ADC', vizLabel:'Analog sensor waveform above SPI frames to the 24-bit ADC, with CS, SCLK, MOSI and MISO lanes',
     lat:[15.218,15.672,15.340] },
   { id:'utown', host:'utown.analytics', tags:['CLOUD'], when:'Jul 2026–present',
-    line:'ETL analytics app for event data',
-    summary:'Co-developing a FastAPI/React ETL analytics app, covering ~500 participants across 10–15 events.',
-    stack:['FastAPI','React','PostgreSQL','Azure Container Apps'],
-    details:['FastAPI/React ETL analytics app','PostgreSQL on Azure Container Apps','~500 participants across 10–15 events'],
+    line:'Participation dashboard for UTown Residence',
+    summary:'Co-developed and deployed a FastAPI/React ETL dashboard that reports resident participation by term for the Residential Life Office, covering ~500 participants across 10–15 events.',
+    stack:['FastAPI','React','PostgreSQL 17','Azure Container Apps','Entra ID','GitHub Actions'],
+    details:['Merges event check-in, housing and Interest Group form exports','Keeps only 13 approved housing columns and never stores names','Quarantines invalid rows with a reason, so row counts reconcile for every file','Runs on Azure Container Apps behind NUS Microsoft sign-in','Deploys on every push to main through GitHub Actions and OIDC, with no stored deploy password'],
     links:[], lat:[18.946,18.701,19.233] },
+  { id:'kitchen', host:'utown.kitchen', tags:['CLOUD','SEC'], when:'Jul 2026–present',
+    line:'Kitchen-slot booking app for residents',
+    summary:'Built and deployed a booking app for UTown residents: book a kitchen slot, join a waitlist and manage bookings, while admins approve residents and set capacity.',
+    stack:['TypeScript','Express','React','PostgreSQL','Drizzle','Azure Container Apps','Entra ID'],
+    details:['Waitlist that promotes the next resident when a place frees up','Per-slot PostgreSQL advisory lock: of eight simultaneous requests for one place, exactly one wins','Append-only audit log of every admin and booking action','NUS Microsoft sign-in; each booking belongs to the signed-in account','Moved with the dashboard to the residence’s own Azure subscription, at about US$25–35 a month'],
+    links:[], lat:[20.512,20.388,20.641] },
   { id:'fpga', host:'fpga.pathfinder', tags:['HW'], status:'in progress',
     line:'BFS/Dijkstra in hardware on a Basys 3',
-    summary:'Pathfinding (BFS/Dijkstra) implemented in hardware on a Basys 3.',
+    summary:'EE2026 group project: a pathfinding arena game on a Basys 3 FPGA. I implemented Dijkstra’s algorithm with a min-heap, BFS, a zoom feature and the Pac-Man-style theme.',
     note:'Status: in progress.',
-    stack:['Basys 3','Block RAM','Hardware queues','FSMs'],
-    details:['BFS/Dijkstra in hardware','Block RAM','Hardware queues','FSMs'],
-    links:[], viz:'bfs', vizCap:'BFS frontier and controller FSM', vizLabel:'Grid where a BFS frontier expands step by step, beside a state machine diagram highlighting the current state',
+    stack:['Basys 3','Verilog','Vivado','Block RAM','FSMs'],
+    details:['Dijkstra’s algorithm with a min-heap','BFS','Zoom','Pac-Man-style visual theme'],
+    links:[{ t:'github.com/padpavan/fpga_board_development', href:GH+'/fpga_board_development' }], viz:'bfs', vizCap:'BFS frontier and controller FSM', vizLabel:'Grid where a BFS frontier expands step by step, beside a state machine diagram highlighting the current state',
     lat:[22.087,22.514,22.160] },
+  { id:'opensession', host:'opensession.daw', tags:[], status:'champion', when:'Nov 2026',
+    line:'Open-source audio workstation, Autonomous SG Hackathon 2026',
+    summary:'Champion of the NUS Hackers track at Autonomous SG Hackathon 2026. Contributed to OpenSession, a team of three’s open-source, recording-first multitrack audio workstation.',
+    stack:['C++20','JUCE','Tracktion Engine'],
+    details:['Record, overdub and audition takes','Non-destructive editing; original recordings are never modified','VST3 and Audio Unit effects; exports a stereo mix and aligned stems'],
+    links:[{ t:'github.com/biggg-nasty/OpenSession', href:'https://github.com/biggg-nasty/OpenSession' }],
+    lat:[24.310,24.702,24.455] },
   { id:'sfu', host:'sfu.ca', tags:[], transit:true, status:'in transit', when:'Jan–Apr 2027',
     line:'Exchange at Simon Fraser University, Vancouver',
     summary:'Exchange at Simon Fraser University, Vancouver.',
@@ -580,13 +594,13 @@ const HOPS = [
 
 // [skill, [hop ids that use it]] — left side top→bottom is pins 1–12, right side top→bottom is pins 24–13.
 const SKILLS_L = [
-  ['Python',['seccenter','utown']], ['C',['stm32']], ['FastAPI',['seccenter','utown']], ['React/Next.js',['seccenter','utown']],
-  ['Linux',['globotix','homelab']], ['Docker',['homelab','utown']], ['TCP/IP',['stm32','homelab','rail']], ['DNS',['homelab']],
-  ['PostgreSQL',['utown']], ['Azure',['utown']], ['OCR pipelines',['seccenter']], ['Git',['stm32','seccenter']],
+  ['Python',['seccenter','utown','rail','kneesound']], ['C',['stm32']], ['FastAPI',['seccenter','utown']], ['React/Next.js',['seccenter','utown','kitchen']],
+  ['Linux',['globotix','homelab','rail']], ['Docker',['homelab','utown','kitchen']], ['TCP/IP',['stm32','homelab','rail','iothub']], ['DNS',['homelab']],
+  ['PostgreSQL',['utown','kitchen']], ['Azure',['utown','kitchen']], ['OCR pipelines',['seccenter']], ['Git',['stm32','seccenter','utown','kitchen','fpga','opensession']],
 ];
 const SKILLS_R = [
   ['I2C',['stm32']], ['SPI',['kneesound']], ['UART',['stm32']], ['STM32',['stm32']],
-  ['ESP32',['kneesound']], ['KiCad',['kneesound']], ['Analog front-ends',['kneesound']], ['FPGA/FSMs',['fpga']],
+  ['ESP32/ESP8266',['kneesound','stm32','iothub']], ['KiCad',['kneesound']], ['Analog front-ends',['kneesound']], ['FPGA/FSMs',['fpga']],
   ['Incident diagnosis',['globotix','rail']], ['Security compliance',['rail','seccenter']], ['CTFs',['ctf']], ['Technical presentations',['seccenter']],
 ];
 
